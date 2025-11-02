@@ -29,8 +29,8 @@ if(isset($_POST['register'])) {
     $hashed_pass = md5($data['pass']);
 
     // Thêm người dùng vào database
-    $query = "INSERT INTO `user_cred` (`name`, `email`, `phonenum`, `address`, `pincode`, `dob`, `password`) 
-              VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $query = "INSERT INTO `user_cred` (`name`, `email`, `phonenum`, `address`, `pincode`, `dob`, `password`, `is_host`)
+              VALUES (?, ?, ?, ?, ?, ?, ?, 0)";
     $values = [$data['name'], $data['email'], $data['phonenum'], $data['address'], $data['pincode'], $data['dob'], $hashed_pass];
 
     if(insert($query, $values, 'sssssss')) {
@@ -61,6 +61,8 @@ if(isset($_POST['login'])) {
             $_SESSION['uId'] = $row['id'];
             $_SESSION['uName'] = $row['name'];
             $_SESSION['uPic'] = $row['profile'];
+            $_SESSION['is_host'] = isset($row['is_host']) ? (int)$row['is_host'] : 0;
+            $_SESSION['host_status'] = $row['host_status'] ?? null;
             echo 'login_success';
         } else {
             echo 'invalid_password';
